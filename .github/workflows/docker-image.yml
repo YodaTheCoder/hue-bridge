@@ -9,15 +9,15 @@ env:
   REGISTRY: docker.io
   # github.repository as <account>/<repo>
   IMAGE_NAME: ${{ github.repository }}
-  BUILD_TIMESTAMP: $(date +%s)
 
 jobs:
   build:
     runs-on: [self-hosted, linux]
     environment: cicd
     steps:
-      - name: Debug env
-        run: echo vars ${{ vars }}
+      - name: Get current date
+        id: date
+        run: echo "::set-output name=date::$(date +%s)"
       - name: Checkout
         uses: actions/checkout@v3
       - name: Login to Docker Hub
@@ -33,7 +33,7 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
-          tags: ${{ github.repository }}:${{ env.BUILD_TIMESTAMP }}
+          tags: ${{ github.repository }}:${{ steps.date.outputs.date }}
       # - name: Log into registry ${{ env.REGISTRY }}
       #   if: github.event_name != 'pull_request'
       #   run: echo ${{ secrets.REGISTRY_TOKEN }} | docker login -u ${{ env.REGISTRY_USERNAME }} --password-stdin
