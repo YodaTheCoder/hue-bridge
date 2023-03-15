@@ -23,4 +23,4 @@ jobs:
       - name: Build the Docker image
         run: |
           docker build . --tag ${{ github.repository }}:${{ BUILD_TIMESTAMP }}
-          docker push ${{ github.repository }}:${{ BUILD_TIMESTAMP }}
+          docker push ${{ github.repository }}:${{ env.BUILD_TIMESTAMP }}
