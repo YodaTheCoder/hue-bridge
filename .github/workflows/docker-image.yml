@@ -14,5 +14,9 @@ jobs:
       - name: List files in the repository
         run: |
           ls ${{ github.workspace }}
+          pwd
       - name: Build the Docker image
-        run: docker build . --tag hue-bridge:$(date +%s)
+        run: |
+          pwd
+          ls -la
+          docker build . --tag hue-bridge:$(date +%s)
