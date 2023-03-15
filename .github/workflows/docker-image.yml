@@ -19,7 +19,7 @@ jobs:
         id: instance
         run: |
           echo "DATE=$(date +%s)" >> $GITHUB_OUTPUT
-          echo "REPO=$(echo $github.repository | tr '[:upper:]' '[:lower:]')" >> $GITHUB_OUTPUT
+          echo "REPO=$(echo ${{ github.repository }} | tr '[:upper:]' '[:lower:]')" >> $GITHUB_OUTPUT
         # run: echo "::set-output name=date::$(date +%s)"
       # - name: Lowercase repository
       #   id: lower-repo
