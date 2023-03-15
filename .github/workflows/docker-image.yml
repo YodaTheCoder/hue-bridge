@@ -15,9 +15,11 @@ jobs:
     runs-on: [self-hosted, linux]
     environment: cicd
     steps:
-      - name: Get current date
-        id: date
-        run: echo "DATE=$(date +%s)" >> $GITHUB_OUTPUT
+      - name: Instance variables
+        id: instance
+        run: |
+          echo "DATE=$(date +%s)" >> $GITHUB_OUTPUT
+          echo "REPO=$($github.repository | tr '[:upper:]' '[:lower:]')" >> $GITHUB_OUTPUT
         # run: echo "::set-output name=date::$(date +%s)"
       # - name: Lowercase repository
       #   id: lower-repo
@@ -33,7 +35,9 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
       - name: Test outputs
-        run: echo "date from previous step '${{ steps.date.outputs.DATE }}'"
+        run: |
+          echo "date from previous step '${{ steps.instance.outputs.DATE }}'"
+          echo "repo from previous step '${{ steps.instance.outputs.REPO }}'"
 
       # - name: Build and push
       #   uses: docker/build-push-action@v4
