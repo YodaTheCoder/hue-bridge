@@ -20,11 +20,6 @@ jobs:
         run: |
           echo "DATE=$(date +%s)" >> $GITHUB_OUTPUT
           echo "REPO=$(echo ${{ github.repository }} | tr '[:upper:]' '[:lower:]')" >> $GITHUB_OUTPUT
-        # run: echo "::set-output name=date::$(date +%s)"
-      # - name: Lowercase repository
-      #   id: lower-repo
-      #   run: |
-      #     "::set-output name=repository::$(echo "$github.repository" | tr '[:upper:]' '[:lower:]')"
       - name: Checkout
         uses: actions/checkout@v3
       - name: Login to Docker Hub
@@ -38,11 +33,10 @@ jobs:
         run: |
           echo "date from previous step '${{ steps.instance.outputs.DATE }}'"
           echo "repo from previous step '${{ steps.instance.outputs.REPO }}'"
-
-      # - name: Build and push
-      #   uses: docker/build-push-action@v4
-      #   with:
-      #     context: .
-      #     file: ./Dockerfile
-      #     push: true
-      #     tags: ${{ steps.lower-repo.outputs.repository }}:${{ steps.date.outputs.date }}
+      - name: Build and push
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          file: ./Dockerfile
+          push: true
+          tags: ${{ steps.instance.outputs.REPO }}:${{ steps.instance.outputs.DATE }}
