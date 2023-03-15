@@ -6,10 +6,10 @@ on: [push]
 #     branches: ["main"]
 
 env:
-  # Use docker.io for Docker Hub if empty
   REGISTRY: docker.io
   # github.repository as <account>/<repo>
   IMAGE_NAME: ${{ github.repository }}
+  BUILD_TIMESTAMP: $(date +%s)
 
 jobs:
   build:
@@ -17,13 +17,10 @@ jobs:
     steps:
       - name: Log into registry ${{ env.REGISTRY }}
         if: github.event_name != 'pull_request'
-        uses: docker/login-action@28218f9b04b4f3f62068d7b6ce6ca5b26e35336c
-        with:
-          registry: ${{ env.REGISTRY }}
-          username: ${{ env.REGISTRY_USERNAME }}
-          password: ${{ secrets.REGISTRY_TOKEN }}
+        run: echo ${{ secrets.REGISTRY_TOKEN }} | docker login -u ${{ env.REGISTRY_USERNAME }} --password-stdin
 
       - uses: actions/checkout@v3
       - name: Build the Docker image
         run: |
-          docker build . --tag hue-bridge:$(date +%s)
+          docker build . --tag ${{ github.repository }}:${{ BUILD_TIMESTAMP }}
+          docker push ${{ github.repository }}:${{ BUILD_TIMESTAMP }}
