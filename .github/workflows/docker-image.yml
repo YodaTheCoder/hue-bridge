@@ -17,11 +17,12 @@ jobs:
     steps:
       - name: Get current date
         id: date
-        run: echo "::set-output name=date::$(date +%s)"
-      - name: Lowercase repository
-        id: lower-repo
-        run: |
-          "::set-output name=repository::$(echo "$github.repository" | tr '[:upper:]' '[:lower:]')"
+        run: echo "{date}=:$(date +%s)" >> $GITHUB_OUTPUT
+        # run: echo "::set-output name=date::$(date +%s)"
+      # - name: Lowercase repository
+      #   id: lower-repo
+      #   run: |
+      #     "::set-output name=repository::$(echo "$github.repository" | tr '[:upper:]' '[:lower:]')"
       - name: Checkout
         uses: actions/checkout@v3
       - name: Login to Docker Hub
@@ -31,18 +32,10 @@ jobs:
           password: ${{ secrets.REGISTRY_TOKEN }}
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
-      - name: Build and push
-        uses: docker/build-push-action@v4
-        with:
-          context: .
-          file: ./Dockerfile
-          push: true
-          tags: ${{ steps.lower-repo.outputs.repository }}:${{ steps.date.outputs.date }}
-      # - name: Log into registry ${{ env.REGISTRY }}
-      #   if: github.event_name != 'pull_request'
-      #   run: echo ${{ secrets.REGISTRY_TOKEN }} | docker login -u ${{ env.REGISTRY_USERNAME }} --password-stdin
-
-      # - name: Build the Docker image
-      #   run: |
-      #     docker build . --tag ${{ github.repository }}:${{ env.BUILD_TIMESTAMP }}
-      #     docker push ${{ github.repository }}:${{ env.BUILD_TIMESTAMP }}
+      # - name: Build and push
+      #   uses: docker/build-push-action@v4
+      #   with:
+      #     context: .
+      #     file: ./Dockerfile
+      #     push: true
+      #     tags: ${{ steps.lower-repo.outputs.repository }}:${{ steps.date.outputs.date }}
