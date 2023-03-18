@@ -19,7 +19,6 @@ jobs:
         id: instance
         run: |
           echo "DATE=$(date +%s)" >> $GITHUB_OUTPUT
-        # uppercase letters not allowed in docker repositories
           echo "REPO=$(echo ${{ github.repository }} | tr '[:upper:]' '[:lower:]')" >> $GITHUB_OUTPUT
       - name: Checkout
         uses: actions/checkout@v3
