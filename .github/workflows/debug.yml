@@ -1,0 +1,25 @@
+name: Docker Image CI
+
+on: [push]
+
+env:
+  REGISTRY: docker.io
+  IMAGE_NAME: ${{ github.repository }}
+
+jobs:
+  build:
+    runs-on: [self-hosted, linux]
+    environment: cicd
+    steps:
+      - name: Instance variables
+        id: instance
+        run: |
+          echo "DATE=$(date +%s)" >> $GITHUB_OUTPUT
+          echo "REPO=$(echo ${{ github.repository }} | tr '[:upper:]' '[:lower:]')" >> $GITHUB_OUTPUT
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Test outputs
+        run: |
+          echo "date from previous step '${{ steps.instance.outputs.DATE }}'"
+          echo "repo from previous step '${{ steps.instance.outputs.REPO }}'"
+          echo "repo ref name '${{ github.ref_name }}'"
