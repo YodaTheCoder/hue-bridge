@@ -35,4 +35,4 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
-          tags: ${{ steps.instance.outputs.REPO }}:${{ steps.instance.outputs.DATE }}
+          tags: ${{ steps.instance.outputs.REPO }}:${{ github.ref_name }}
