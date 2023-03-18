@@ -19,6 +19,7 @@ jobs:
         id: instance
         run: |
           echo "DATE=$(date +%s)" >> $GITHUB_OUTPUT
+        # uppercase letters not allowed in docker repositories
           echo "REPO=$(echo ${{ github.repository }} | tr '[:upper:]' '[:lower:]')" >> $GITHUB_OUTPUT
       - name: Checkout
         uses: actions/checkout@v3
@@ -29,10 +30,6 @@ jobs:
           password: ${{ secrets.REGISTRY_TOKEN }}
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
-      - name: Test outputs
-        run: |
-          echo "date from previous step '${{ steps.instance.outputs.DATE }}'"
-          echo "repo from previous step '${{ steps.instance.outputs.REPO }}'"
       - name: Build and push
         uses: docker/build-push-action@v4
         with:
