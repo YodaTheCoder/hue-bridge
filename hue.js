@@ -110,5 +110,6 @@ export default class Hue {
     await this.init();
     const tl = this.lights.find((f) => f.id === id);
     await setLightState({ ip: this.bridge, user: this.user, light: id, on: !tl.on });
+    await this.init();
   }
 }
